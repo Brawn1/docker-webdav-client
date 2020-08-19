@@ -53,7 +53,7 @@ fi
 # Mount and verify that something is present. davfs2 always creates a lost+found
 # sub-directory, so we can use the presence of some file/dir as a marker to
 # detect that mounting was a success. Execute the command on success.
-mount -t davfs $WEBDRIVE_URL $DEST -o uid=$OWNER,gid=users,dir_mode=755,file_mode=755
+mount -t davfs $WEBDRIVE_URL $DEST -o uid=$OWNER,gid=users,dir_mode=777,file_mode=777
 if [ -n "$(ls -1A $DEST)" ]; then
     echo "Mounted $WEBDRIVE_URL onto $DEST"
     exec "$@"

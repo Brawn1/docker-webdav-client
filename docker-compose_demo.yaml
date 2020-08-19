@@ -1,0 +1,28 @@
+version: "3"
+
+services:
+  scan_to_webdav:
+    restart: always
+    image: registry.bscn.at/bsn/webdavscanclient:latest
+    build: .
+    devices:
+      - "/dev/fuse:/dev/fuse"
+    cap_add:
+      - SYS_ADMIN
+    security_opt:
+      - "apparmor=unconfined"
+    environment:
+      - WEBDRIVE_USERNAME=<webdav username>
+      - WEBDRIVE_PASSWORD=<webdav password>
+      - WEBDRIVE_URL=<url to webdav drive>
+      - DAVFS2_ASK_AUTH=0
+      - OWNER=1002
+      - SCANNER_FOLDERS=Scanner Guenter,Scanner Jessica,Scanner Max
+      - SYNCPERIOD=30
+    volumes:
+      - /home/scanner:/mnt/scanner:rw
+    networks:
+      - backend
+
+networks:
+   backend:

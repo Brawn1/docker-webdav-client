@@ -8,6 +8,11 @@ ENV WEBDRIVE_USERNAME=
 ENV WEBDRIVE_PASSWORD=
 ENV WEBDRIVE_PASSWORD_FILE=
 
+# share from scanner
+ENV SCANNER_MOUNT=/mnt/scanner
+# comma seperated list
+ENV SCANNER_FOLDERS=
+ENV SYNCPERIOD=30
 # User ID of share owner
 ENV OWNER=0
 
@@ -20,12 +25,16 @@ ENV WEBDRIVE_MOUNT=/mnt/webdrive
 # DAVFS2_ASK_AUTH=0 will set the davfs2 configuration option ask_auth to 0 for
 # that share. See the manual for the list of available options.
 
-RUN apk --no-cache add ca-certificates davfs2 tini useradd
+RUN apk --no-cache add ca-certificates davfs2 tini
+
+# create user for admin on Synology
+RUN adduser -D -H -u 1024 -G users admin
 
 COPY *.sh /usr/local/bin/
 
 # Following should match the WEBDRIVE_MOUNT environment variable.
-VOLUME [ "/mnt/webdrive" ]
+RUN mkdir -p /mnt/scanner
+VOLUME [ "/mnt/webdrive", "/mnt/scanner" ]
 
 # The default is to perform all system-level mounting as part of the entrypoint
 # to then have a command that will keep listing the files under the main share.
